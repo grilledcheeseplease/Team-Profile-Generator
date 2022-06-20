@@ -11,5 +11,6 @@ describe('Manager', () => {
     it('getRole() should return \'Manager\'', () => {
         const testValue = 'Manager';
         const e = new Manager('Foo', 1, 'ron@swanson.com', 999);
+        expect(getRole()).toBe(testValue);
     });
 });
