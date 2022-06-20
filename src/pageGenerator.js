@@ -34,13 +34,6 @@ const generatePage = ({ name, id, email, officeNumber, role, github, school, }) 
 
 
 
-
-
-
-
-
-
-
 module.exports = {
     generatePage
 };
