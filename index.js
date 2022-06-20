@@ -1,5 +1,12 @@
 const inquirer = require('inquirer');
-const utils = require('./utils/pageGenerator');
+const utils = require('./src/pageGenerator');
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
+
+const teamMembers = [];
+
+
 
 const questions = [
     {
@@ -99,5 +106,9 @@ const questions = [
             'Intern',
             'I don\'t want to add any more team members.',
         ]
-    },
-]
+    }
+];
+
+inquirer.prompt(questions).then((answers) => {
+    utils.generatePage(answers);
+});
