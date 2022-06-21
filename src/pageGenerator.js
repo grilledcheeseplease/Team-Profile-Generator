@@ -49,13 +49,13 @@ const internCard = (intern) => {
 };
 
 const teamCards = (data) => {
-   
+
     let pageArray = [];
 
     for (let i = 0; i < data.length; i++) {
         const employee = data[i];
         const role = employee.getRole();
-      
+
         if (role === 'Manager') {
             const managerData = managerCard(employee);
 
@@ -77,7 +77,7 @@ const teamCards = (data) => {
     }
 
     const employeeCards = pageArray.join('')
-    
+
     const generateTeam = generatePage(employeeCards);
     return generateTeam;
 
@@ -112,8 +112,12 @@ const generatePage = (teamCards) => {
   
 </body>
 
-</html>`)
-console.log(template);
+</html>`);
+
+    fs.writeFileSync('./output/index.html', template);
+    console.log('AVENGERS ASSEMBLED');
+    process.exit();
+
 }
 
 module.exports = {
