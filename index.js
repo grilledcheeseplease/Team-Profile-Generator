@@ -9,9 +9,10 @@ const Intern = require('./lib/Intern');
 const teamMembers = [];
 
 // question prompts with conditional questions seperated by team member role with when
-
-const teamPrompts = [
-    {
+const init = () => {teamPrompts()};
+const teamPrompts = () => {
+    inquirer.prompt(
+        {
         type: 'list',
         message: 'What is your team member\'s role?',
         name: 'role',
@@ -61,11 +62,22 @@ const teamPrompts = [
         message: 'Would you like to add another team member?',
         name: 'addMember'
     },
+    };
 
+const promptUser = () => {
 
-];
+    return inquirer.prompt(teamPrompts)
+    .then(userResponse => {
+        teamMembers.push(userResponse);
+        if (userResponse.addMember) {
+            return promptUser();
+        } else {
+            return teamMembers;
+        };
+    });
+};
 
-
-inquirer.prompt(teamPrompts).then((answers) => {
-    src.generatePage(answers);
-});
+// inquirer.prompt(teamPrompts).then((answers) => {
+//     src.generatePage(answers);
+// });
+init();
