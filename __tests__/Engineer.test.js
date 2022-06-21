@@ -1,4 +1,4 @@
-const Engineer = require("../lib/Engineer");
+const { Engineer } = require("../lib/Engineer");
 
 describe('Engineer', () => {
 
@@ -12,5 +12,11 @@ describe('Engineer', () => {
         const testValue = 'Engineer';
         const e = new Engineer('Foo', 1, 'leslie@knope.com', 'PawneeGitHub');
         expect(e.getRole()).toBe(testValue);
+    });
+
+    it('Should get GitHub username with getGithub()', () => {
+        const testValue = 'Engineer';
+        const e = new Engineer('Foo', 1, 'leslie@knope.com', testValue);
+        expect(e.getGithub()).toBe(testValue);
     });
 });
