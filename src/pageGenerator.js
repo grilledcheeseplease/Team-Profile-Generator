@@ -1,6 +1,89 @@
 const fs = require('fs');
 
-const generatePage = ({ name, id, email, officeNumber, role, github, school, }) => {
+const managerCard = (manager) => {
+    return `<div class="w3-third">
+        <div class="w3-card">
+            <div class="w3-container">
+                <h2>${manager.name}</h2>
+                <h3>Manager</h3>
+                <ul>
+                    <li>${manager.id}</li>
+                    <li>Email: <a href="mailto:${manager.email}">${manager.email}</a></li>
+                    <li>Office Number: ${manager.officeNumber}</li>
+                </ul>
+            </div>
+        </div>
+    </div>`
+};
+
+const engineerCard = (engineer) => {
+    return `<div class="w3-third">
+        <div class="w3-card">
+            <div class="w3-container">
+                <h2>${engineer.name}</h2>
+                <h3>Engineer</h3>
+                <ul>
+                    <li>${engineer.id}</li>
+                    <li>Email: <a href="mailto:${engineer.email}">${engineer.email}</a></li>
+                    <li>GitHub: <a href="https://github.com/${engineer.github}">${engineer.github}</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>`
+};
+
+const internCard = (intern) => {
+    return `<div class="w3-third">
+        <div class="w3-card">
+            <div class="w3-container">
+                <h2>${intern.name}</h2>
+                <h3>Intern</h3>
+                <ul>
+                    <li>${intern.id}</li>
+                    <li>Email:<a href="mailto:${intern.email}">${intern.email}</a></li>
+                    <li>School: ${intern.school}</li>
+                </ul>
+            </div>
+        </div>
+    </div>`
+};
+
+const teamCards = (data) => {
+   
+    let pageArray = [];
+
+    for (let i = 0; i < data.length; i++) {
+        const employee = data[i];
+        const role = employee.getRole();
+      
+        if (role === 'Manager') {
+            const managerData = managerCard(employee);
+
+            pageArray.push(managerData);
+        }
+
+        if (role === 'Engineer') {
+            const engineerData = engineerCard(employee);
+
+            pageArray.push(engineerData);
+        }
+
+        if (role === 'Intern') {
+            const internData = internCard(employee);
+
+            pageArray.push(internData);
+        }
+
+    }
+
+    const employeeCards = pageArray.join('')
+    
+    const generateTeam = generatePage(employeeCards);
+    return generateTeam;
+
+};
+
+const generatePage = (teamCards) => {
     const template = (`
     <!DOCTYPE html>
 <html lang="en">
@@ -25,17 +108,14 @@ const generatePage = ({ name, id, email, officeNumber, role, github, school, }) 
   </header>
 
   <div class="w3-row-padding"></div>
-
+    ${teamCards}
   
 </body>
 
 </html>`)
+console.log(template);
 }
 
-
-
 module.exports = {
-    generatePage
+    teamCards
 };
-
-

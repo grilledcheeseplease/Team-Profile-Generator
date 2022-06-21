@@ -50,9 +50,13 @@ const roleSelect = () => {
         }
     )
     .then(data => {
-        if (data.roleSelect === 'Manager'){ return managerQuestions();};
-        if (data.roleSelect === 'Engineer'){ return engineerQuestions();};
-        if (data.roleSelect === 'Inter'){ return internQuestions();};
-        if (data.roleSelect === 'I don\'t want to add any more team members.'){ return src(teamMembers);};
+        if (data.role === 'Manager'){ managerQuestions();};
+        if (data.role === 'Engineer'){ engineerQuestions();};
+        if (data.role === 'Intern'){ internQuestions();};
+        if (data.role === 'I don\'t want to add any more team members.'){ 
+            console.log(src.teamCards(teamMembers))
+            return src.teamCards(teamMembers);};
     })
-}
+};
+
+init();
