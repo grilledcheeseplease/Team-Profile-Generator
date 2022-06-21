@@ -1,83 +1,58 @@
 // pull in needed mods and files 
 const inquirer = require('inquirer');
 const src = require('./src/pageGenerator');
-const Manager = require('./lib/Manager');
-const Engineer = require('./lib/Engineer');
-const Intern = require('./lib/Intern');
+const {Manager, managerPrompt} = require('./lib/Manager');
+const {Engineer, engineerPrompt} = require('./lib/Engineer');
+const {Intern, internPrompt} = require('./lib/Intern');
 
 // empty array to store team members
 const teamMembers = [];
 
-// question prompts with conditional questions seperated by team member role with when
-const init = () => {teamPrompts()};
-const teamPrompts = () => {
-    inquirer.prompt(
-        {
-        type: 'list',
-        message: 'What is your team member\'s role?',
-        name: 'role',
-        choices: () => {
-            if (teamMembers.some(employee => employee.role === 'Manager')) {
-                return ['Engineer', 'Intern']    
-            } else {
-                return ['Manager', 'Engineer', 'Intern']
-            }
-        }
-    },
-    {
-        type: 'input',
-        message: 'What is your team member\'s name?',
-        name: 'name',
-    },
-    {
-        type: 'number',
-        message: 'What is your team member\'s id number?',
-        name: 'id',
-    },
-    {
-        type: 'input',
-        message: 'What is your team member\'s email?',
-        name: 'email'
-    },
-    {
-        type: 'number',
-        message: 'What is your manager\'s office number?',
-        name: 'officeNumber',
-        when: (answers) => answers.role === 'Manager'
-    },
-    {
-        type: 'input',
-        message: 'What is your engineer\'s GitHub username?',
-        name: 'github',
-        when: (answers) => answers.role === 'Engineer'
-    },
-    {
-        type: 'input',
-        message: 'What is your intern\'s school?',
-        name: 'school',
-        when: (answers) => answers.role === 'Intern'
-    },
-    {
-        type: 'confirm',
-        message: 'Would you like to add another team member?',
-        name: 'addMember'
-    },
-    };
+const init = () => {managerQuestions()};
 
-const promptUser = () => {
-
-    return inquirer.prompt(teamPrompts)
-    .then(userResponse => {
-        teamMembers.push(userResponse);
-        if (userResponse.addMember) {
-            return promptUser();
-        } else {
-            return teamMembers;
-        };
-    });
+const managerQuestions = () => {
+    inquirer.prompt(managerPrompt)
+    .then((data) => {
+        const manager = new Manager(data.name, data.id, data.email, data.officeNumber)
+        teamMembers.push(manager);
+        roleSelect();
+    })
+};
+const engineerQuestions = () => {
+    inquirer.prompt(engineerPrompt)
+    .then((data) => {
+        const engineer = new Engineer(data.name, data.id, data.email, data.github)
+        teamMembers.push(engineer);
+        roleSelect();
+    })
+};
+const internQuestions = () => {
+    inquirer.prompt(internPrompt)
+    .then((data) => {
+        const intern = new Intern(data.name, data.id, data.email, data.school)
+        teamMembers.push(intern);
+        roleSelect();
+    })
 };
 
-// inquirer.prompt(teamPrompts).then((answers) => {
-//     src.generatePage(answers);
-// });
-init();
+const roleSelect = () => {
+    inquirer.prompt(
+        {
+            type: 'list',
+            message: 'What type of team member would you like to add?',
+            name: 'role',
+            choices: [
+                'Manager',
+                'Engineer',
+                'Intern',
+                'I don\'t want to add any more team members.',
+            ]
+        }
+    )
+    .then(data => {
+        if (data.roleSelect === 'Manager'){ return managerQuestions();};
+        if (data.roleSelect === 'Engineer'){ return engineerQuestions();};
+        if (data.roleSelect === 'Inter'){ return internQuestions();};
+        if (data.roleSelect === 'I don\'t want to add any more team members.'){ return src(teamMembers);};
+    })
+}
